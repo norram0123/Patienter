@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">Patienter</string>
+
+    <!-- Set -->
+    <string name="title_hint">Title(optional)</string>
+    <string name="enter_year">Enter year</string>
+    <string name="enter_month">Enter month</string>
+    <string name="enter_day">Enter day</string>
+    <string name="enter_hour">Enter hour</string>
+    <string name="enter_minute">Enter minute</string>
+    <string name="enter_second">Enter second</string>
+    <string name="detail_switch">Detail</string>
+    <string name="start_button">Start</string>
+    <string name="achieve">ACHIEVEMENT</string>
+    <string name="alert1">You need to chose all options.</string>
+    <string name="alert2">You need to enter future time.</string>
+    <string name="help_menu">Help</string>
+    <string name="help_text">①You can set title for Achievement.
+    \n②You need to enter target date.
+    \n③You can enter broken-down time to switch the toggle. </string>
+
+    <!-- Count -->
+    <string name="default_goal_time">2030-11-11T00:00:00</string>
+    <string name="days">days</string>
+    <string name="and"><![CDATA[&]]></string>
+    <string name="retire_button">Retire</string>
+
+    <!-- Achieve -->
+    <string name="back">Back</string>
+    <string name="success">Success</string>
+    <string name="failure">Failure</string>
+
+    <!-- Reset -->
+    <string name="cong">Congratulations!</string>
+    <string name="giveup">Give up...</string>
+    <string name="reset_button">Reset</string>
+    <string name="total">Total:About</string>
+    <string name="hours">hours</string>
+
+    <!-- Keys -->
+    <string name="set_flag">SFLAG</string>
+    <string name="start_time">STIME</string>
+    <string name="goal_time">GTIME</string>
+    <string name="goal_title">GTITLE</string>
+
+    <!-- Dialogs -->
+    <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
+    <string name="start_dialog">Are you ready?</string>
+    <string name="retire_dialog">The result is recorded in Achievement. Are you sure?</string>
+
+</resources>

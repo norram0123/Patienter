@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">Patienter</string>
+
+    <!-- Set -->
+    <string name="title_hint">タイトル(任意)</string>
+    <string name="enter_year">年を入力</string>
+    <string name="enter_month">月を入力</string>
+    <string name="enter_day">日を入力</string>
+    <string name="enter_hour">時間を入力</string>
+    <string name="enter_minute">分を入力</string>
+    <string name="enter_second">秒を入力</string>
+    <string name="detail_switch">Detail</string>
+    <string name="start_button">Start</string>
+    <string name="achieve">ACHIEVEMENT</string>
+    <string name="alert1">全ての欄を入力してください。</string>
+    <string name="alert2">未来の時間を入力してください。</string>
+    <string name="help_menu">Help</string>
+    <string name="help_text">①タイトルを設定することが出来ます。
+    \n②目標時間を設定する必要があります。
+    \n③オンにすることで詳細な目標時間を設定出来ます。</string>
+
+    <!-- Count -->
+    <string name="default_goal_time">2030-11-11T00:00:00</string>
+    <string name="days">日</string>
+    <string name="and"><![CDATA[&]]></string>
+    <string name="retire_button">Retire</string>
+
+    <!-- Achieve -->
+    <string name="back">Back</string>
+    <string name="success">Success</string>
+    <string name="failure">Failure</string>
+
+    <!-- Reset -->
+    <string name="cong">おめでとう\nございます！</string>
+    <string name="giveup">ギブアップ...</string>
+    <string name="reset_button">Reset</string>
+    <string name="total">合計: 約</string>
+    <string name="hours"> 時間</string>
+
+    <!-- Keys -->
+    <string name="set_flag">SFLAG</string>
+    <string name="start_time">STIME</string>
+    <string name="goal_time">GTIME</string>
+    <string name="goal_title">GTITLE</string>
+
+    <!-- Dialogs -->
+    <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
+    <string name="start_dialog">準備はよろしいですか？</string>
+    <string name="retire_dialog">結果は実績に記録されます。本当によろしいですか？</string>
+
+</resources>
