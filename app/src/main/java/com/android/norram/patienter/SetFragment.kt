@@ -1,8 +1,6 @@
 package com.android.norram.patienter
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -30,7 +28,7 @@ class SetFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        Log.i("vox", "onCreate started.")
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
         sharedPref?.let {
             val flag = sharedPref.getBoolean(getString(R.string.set_flag), false)
@@ -38,16 +36,17 @@ class SetFragment : Fragment() {
         }
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        Log.i("vox", "onCreateView started.")
         val binding = DataBindingUtil.inflate<FragmentSetBinding>(inflater,
             R.layout.fragment_set, container, false)
 
         var flagMonthSpinner = true
-        val now = LocalDateTime.now()
+        Log.i("vox", "1")
+        Log.i("vox", "2")
 
         titleEdit = binding.titleEdit
         yearSpinner = binding.yearSpinner
@@ -59,6 +58,7 @@ class SetFragment : Fragment() {
         hourText = binding.hourText
         minuteText = binding.minuteText
         secondText = binding.secondText
+        Log.i("vox", "3")
 
         val yearList = ArrayList<String>()
         val monthList = ArrayList<String>()
@@ -70,6 +70,7 @@ class SetFragment : Fragment() {
         monthList.add("")
         dayList.add("")
 
+        val now = LocalDateTime.now()
         for(i in 0..10) {
             yearList.add((now.year + i).toString())
         }
@@ -78,7 +79,7 @@ class SetFragment : Fragment() {
         }
         val calendar = Calendar.getInstance()
         calendar.set(now.year, now.monthValue - 1, 1)
-        var dayMax = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+        val dayMax = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
         for(i in 1..dayMax) {
             dayList.add(i.toString())
         }
@@ -202,7 +203,7 @@ class SetFragment : Fragment() {
             }
         }
 
-        binding.startButton.setOnClickListener { view: View ->
+        binding.startButton.setOnClickListener {
             if(monthSpinner.selectedItem.toString() == ""
                 || daySpinner.selectedItem.toString() == "") {
                 Toast.makeText(context, R.string.alert1, Toast.LENGTH_LONG).show()

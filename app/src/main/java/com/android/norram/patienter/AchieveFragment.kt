@@ -1,15 +1,14 @@
 package com.android.norram.patienter
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.SimpleAdapter
 import androidx.databinding.DataBindingUtil
-import com.android.norram.patienter.databinding.FragmentAchieveBinding
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
+import com.android.norram.patienter.databinding.FragmentAchieveBinding
 
 
 class AchieveFragment : Fragment() {
@@ -20,16 +19,20 @@ class AchieveFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.i("testtest", "1")
+        Log.i("testtest", "2")
         val binding = DataBindingUtil.inflate<FragmentAchieveBinding>(inflater,
             R.layout.fragment_achieve, container, false)
+        Log.i("testtest", "3")
 
-        toolbar = binding.toolbar
+//        toolbar = binding.toolbar
 
         if(helper == null) {
             helper = AchieveOpenHelper(requireContext())
         }
         val achieveList = ArrayList<HashMap<String, String>>()
         val db = helper!!.writableDatabase
+
         try {
             // rawQueryというSELECT専用メソッドを使用してデータを取得する
             val c = db.rawQuery("select sof, period, title from ACHIEVE_TABLE order by id DESC", null)

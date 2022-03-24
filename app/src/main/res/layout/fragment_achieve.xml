@@ -16,8 +16,6 @@
             android:layout_height="wrap_content"
             android:background="#8BC34A"
             android:minHeight="?attr/actionBarSize"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
             app:contentInsetStart="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,8 +30,7 @@
                 android:contentDescription="@string/back"
                 android:minHeight="48dp"
                 android:src="@drawable/baseline_arrow_back_24"
-                tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="6dp" />
+                tools:layout_editor_absoluteY="4dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -41,9 +38,7 @@
                 android:layout_gravity="center"
                 android:fontFamily="@font/quicksand_bold"
                 android:text="@string/achieve"
-                android:textSize="24sp"
-                tools:layout_editor_absoluteX="60dp"
-                tools:layout_editor_absoluteY="18dp" />
+                android:textSize="24sp" />
         </androidx.appcompat.widget.Toolbar>
 
 

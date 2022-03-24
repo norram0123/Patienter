@@ -22,7 +22,6 @@ class ResetFragment : Fragment() {
         binding.congText.text = args.message
         binding.totalTimeText.text = getString(R.string.total) + " " + args.hours + " " + getString(R.string.hours)
 
-
         binding.resetButton.setOnClickListener { view: View->
             view.findNavController()
                 .navigate(R.id.action_resetFragment_to_setFragment)

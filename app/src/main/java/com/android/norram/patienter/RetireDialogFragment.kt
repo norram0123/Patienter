@@ -7,8 +7,9 @@ import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
+import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
+import java.time.LocalTime
 import java.util.*
 
 class RetireDialogFragment constructor(_timer: Timer) : DialogFragment() {
@@ -35,8 +36,18 @@ class RetireDialogFragment constructor(_timer: Timer) : DialogFragment() {
                             sharedPref?.getString(getString(R.string.start_time), defaultValue))
                         val goalTime = LocalDateTime.parse(
                             sharedPref?.getString(getString(R.string.goal_time), defaultValue))
+                        val now = LocalDateTime.now()
 
-                        val hours = ChronoUnit.HOURS.between(startTime.toLocalTime(), LocalDateTime.now()).toInt()
+                        var diffDays = compareLocalDate(startTime.toLocalDate(), now.toLocalDate())
+                        var diffSeconds: Long = 0
+                        if(startTime.toLocalTime() < now.toLocalTime()) {
+                            diffSeconds = compareLocalTime(startTime.toLocalTime(), now.toLocalTime())
+                        } else {
+                            diffDays--
+                            diffSeconds = compareLocalTime(startTime.toLocalTime(), now.toLocalTime().plusHours(24L))
+                        }
+                        val half = 1800
+                        val hours = (diffDays*24 + ((diffSeconds+half) / 3600)).toInt()
                         val message = getString(R.string.giveup)
 
                         val period = "${startTime.year}/${startTime.monthValue}/${startTime.dayOfMonth}" + " ～ " +
@@ -71,5 +82,23 @@ class RetireDialogFragment constructor(_timer: Timer) : DialogFragment() {
             // Create the AlertDialog object and return it
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
+    }
+
+    private fun compareLocalDate(dateSmall: LocalDate, dateBig: LocalDate): Long {
+        var diffDays: Long = 0
+        var d1 = dateSmall
+        val d2 = dateBig
+        while(d1 != d2) {
+            d1 = d1.plusDays(1L)
+            diffDays++
+        }
+        return diffDays
+    }
+
+    private fun compareLocalTime(timeSmall: LocalTime, timeBig: LocalTime): Long {
+        var diffSeconds: Long = 0
+        var s1 = timeSmall.hour * 3600 + timeSmall.minute * 60 + timeSmall.second
+        var s2 = timeBig.hour * 3600 + timeBig.minute * 60 + timeBig.second
+        return (s2 -s1).toLong()
     }
 }

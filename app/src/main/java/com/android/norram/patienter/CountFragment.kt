@@ -15,9 +15,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.android.norram.patienter.databinding.FragmentCountBinding
+import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
+import java.time.LocalTime
 import java.util.*
 
 class CountFragment : Fragment() {
@@ -42,7 +42,16 @@ class CountFragment : Fragment() {
         goalTime = LocalDateTime.parse(sharedPref.getString(getString(R.string.goal_time), defaultValue))
 
         now = LocalDateTime.now()
-        hours = ChronoUnit.HOURS.between(startTime.toLocalTime(), goalTime.toLocalTime()).toInt()
+        var diffDays = compareLocalDate(startTime.toLocalDate(), goalTime.toLocalDate())
+        var diffSeconds: Long = 0
+        if(startTime.toLocalTime() < goalTime.toLocalTime()) {
+            diffSeconds = compareLocalTime(startTime.toLocalTime(), goalTime.toLocalTime())
+        } else {
+            diffDays--
+            diffSeconds = compareLocalTime(startTime.toLocalTime(), goalTime.toLocalTime().plusHours(24L))
+        }
+        val half = 1800
+        hours = (diffDays*24 + ((diffSeconds+half) / 3600)).toInt()
         message = getString(R.string.cong)
 
         Log.i("vox", "startTime(after): ${startTime}")
@@ -77,19 +86,19 @@ class CountFragment : Fragment() {
 //        timeLinear.layoutParams = wlLayout
         Log.i("equals", "h:${wlLayout.height}, w:${wlLayout.width}")
 
-        val dtformat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
-        goalTimeText.text = ("Goal Time: " + dtformat.format(goalTime))
+        goalTimeText.text = "Goal Time: " + "%1$04d/%2$02d/%3$02d %4$02d:%5$02d:%6$02d".format(goalTime.year, goalTime.monthValue, goalTime.dayOfMonth, goalTime.hour, goalTime.minute, goalTime.second)
 
         timer.schedule(object : TimerTask() {
             override fun run() {
                 handler.post {
                     now = LocalDateTime.now()
-                    if(now.hour > goalTime.hour) {
-                        differentSeconds = 3600*24 + ChronoUnit.SECONDS.between(now.toLocalTime(), goalTime.toLocalTime())
-                        differentDays = ChronoUnit.DAYS.between(now.toLocalDate(), goalTime.toLocalDate()) - 1
+//                    if(now.hour >= goalTime.hour) {
+                    if(now.toLocalTime() >= goalTime.toLocalTime()) {
+                        differentSeconds = 3600*24 + compareLocalTime(now.toLocalTime(), goalTime.toLocalTime())
+                        differentDays = compareLocalDate(now.toLocalDate(), goalTime.toLocalDate()) - 1
                     } else {
-                        differentSeconds = ChronoUnit.SECONDS.between(now.toLocalTime(), goalTime.toLocalTime())
-                        differentDays = ChronoUnit.DAYS.between(now.toLocalDate(), goalTime.toLocalDate())
+                        differentSeconds = compareLocalTime(now.toLocalTime(), goalTime.toLocalTime())
+                        differentDays = compareLocalDate(now.toLocalDate(), goalTime.toLocalDate())
                     }
                     val h = differentSeconds / 3600
                     val m = differentSeconds % 3600 / 60
@@ -133,7 +142,7 @@ class CountFragment : Fragment() {
     }
 
     private fun judge(): Boolean {
-        if(now >= goalTime) {
+        if(now > goalTime) {
 //            timer.cancel()
 
             if(helper == null) { helper = AchieveOpenHelper(requireContext()) }
@@ -157,5 +166,23 @@ class CountFragment : Fragment() {
             return true
         }
         return false
+    }
+
+    private fun compareLocalDate(dateSmall: LocalDate, dateBig: LocalDate): Long {
+        var diffDays: Long = 0
+        var d1 = dateSmall
+        val d2 = dateBig
+        while(d1 != d2) {
+            d1 = d1.plusDays(1L)
+            diffDays++
+        }
+        return diffDays
+    }
+
+    private fun compareLocalTime(timeSmall: LocalTime, timeBig: LocalTime): Long {
+        var diffSeconds: Long = 0
+        var s1 = timeSmall.hour * 3600 + timeSmall.minute * 60 + timeSmall.second
+        var s2 = timeBig.hour * 3600 + timeBig.minute * 60 + timeBig.second
+        return (s2 -s1).toLong()
     }
 }
