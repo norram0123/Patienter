@@ -33,6 +33,8 @@ class CountFragment : Fragment() {
     private lateinit var now: LocalDateTime
     private lateinit var timer: Timer
 
+    private var dialogFragment: RetireDialogFragment? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i("vox", "count onCreate started")
@@ -116,9 +118,9 @@ class CountFragment : Fragment() {
         }, 0, 60)
 
         binding.retireButton.setOnClickListener { view: View ->
-            val dialogFragment = RetireDialogFragment(timer)
+            dialogFragment = RetireDialogFragment(timer)
             activity?.let {
-                dialogFragment.show(it.supportFragmentManager,  "retire_dialog")
+                dialogFragment?.show(it.supportFragmentManager,  "retire_dialog")
             }
         }
 
@@ -142,7 +144,7 @@ class CountFragment : Fragment() {
     }
 
     private fun judge(): Boolean {
-        if(now > goalTime) {
+        if(now >= goalTime) {
 //            timer.cancel()
 
             if(helper == null) { helper = AchieveOpenHelper(requireContext()) }
@@ -163,6 +165,7 @@ class CountFragment : Fragment() {
                 remove(getString(com.android.norram.patienter.R.string.goal_title))
                 apply()
             }
+            dialogFragment?.dismiss()
             return true
         }
         return false
