@@ -22,7 +22,9 @@
             app:layout_constraintBottom_toTopOf="@+id/gridLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:autofillHints=""
+            tools:targetApi="o"/>
 
         <androidx.gridlayout.widget.GridLayout
             android:id="@+id/gridLayout"
@@ -36,21 +38,21 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Year"
+                android:text="@string/year"
                 app:layout_column="0"
                 app:layout_row="0" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Month"
+                android:text="@string/month"
                 app:layout_column="1"
                 app:layout_row="0" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Day"
+                android:text="@string/day"
                 app:layout_column="2"
                 app:layout_row="0" />
 
@@ -101,7 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Hour"
+                android:text="@string/hour"
                 android:visibility="invisible"
                 app:layout_column="0"
                 app:layout_row="2" />
@@ -111,7 +113,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Minute"
+                android:text="@string/minute"
                 android:visibility="invisible"
                 app:layout_column="1"
                 app:layout_row="2" />
@@ -121,7 +123,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Second"
+                android:text="@string/second"
                 android:visibility="invisible"
                 app:layout_column="2"
                 app:layout_row="2" />

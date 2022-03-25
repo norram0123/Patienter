@@ -39,7 +39,7 @@ class RetireDialogFragment constructor(_timer: Timer) : DialogFragment() {
                         val now = LocalDateTime.now()
 
                         var diffDays = compareLocalDate(startTime.toLocalDate(), now.toLocalDate())
-                        var diffSeconds: Long = 0
+                        val diffSeconds: Long
                         if(startTime.toLocalTime() < now.toLocalTime()) {
                             diffSeconds = compareLocalTime(startTime.toLocalTime(), now.toLocalTime())
                         } else {
@@ -48,7 +48,7 @@ class RetireDialogFragment constructor(_timer: Timer) : DialogFragment() {
                         }
                         val half = 1800
                         val hours = (diffDays*24 + ((diffSeconds+half) / 3600)).toInt()
-                        val message = getString(R.string.giveup)
+                        val message = getString(R.string.give_up)
 
                         val period = "${startTime.year}/${startTime.monthValue}/${startTime.dayOfMonth}" + " ～ " +
                                 "${goalTime.year}/${goalTime.monthValue}/${goalTime.dayOfMonth}"
@@ -63,10 +63,10 @@ class RetireDialogFragment constructor(_timer: Timer) : DialogFragment() {
 
                         sharedPref?.let {
                             with(sharedPref.edit()) {
-                                putBoolean(getString(com.android.norram.patienter.R.string.set_flag), false)
-                                remove(getString(com.android.norram.patienter.R.string.start_time))
-                                remove(getString(com.android.norram.patienter.R.string.goal_time))
-                                remove(getString(com.android.norram.patienter.R.string.goal_title))
+                                putBoolean(getString(R.string.set_flag), false)
+                                remove(getString(R.string.start_time))
+                                remove(getString(R.string.goal_time))
+                                remove(getString(R.string.goal_title))
                                 apply()
                             }
                         }
@@ -96,9 +96,8 @@ class RetireDialogFragment constructor(_timer: Timer) : DialogFragment() {
     }
 
     private fun compareLocalTime(timeSmall: LocalTime, timeBig: LocalTime): Long {
-        var diffSeconds: Long = 0
-        var s1 = timeSmall.hour * 3600 + timeSmall.minute * 60 + timeSmall.second
-        var s2 = timeBig.hour * 3600 + timeBig.minute * 60 + timeBig.second
+        val s1 = timeSmall.hour * 3600 + timeSmall.minute * 60 + timeSmall.second
+        val s2 = timeBig.hour * 3600 + timeBig.minute * 60 + timeBig.second
         return (s2 -s1).toLong()
     }
 }

@@ -15,12 +15,12 @@ class ResetFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = DataBindingUtil.inflate<FragmentResetBinding>(inflater,
             R.layout.fragment_reset, container, false)
         val args: ResetFragmentArgs by navArgs()
         binding.congText.text = args.message
-        binding.totalTimeText.text = getString(R.string.total) + " " + args.hours + " " + getString(R.string.hours)
+        binding.totalTimeText.text = getString(R.string.total).format(args.hours)
 
         binding.resetButton.setOnClickListener { view: View->
             view.findNavController()

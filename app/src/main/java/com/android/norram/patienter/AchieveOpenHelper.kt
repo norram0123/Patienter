@@ -7,9 +7,9 @@ import android.database.sqlite.SQLiteOpenHelper
 class AchieveOpenHelper constructor(context: Context) : SQLiteOpenHelper(context, DBName, null, VERSION) {
     companion object {
         // データベース名
-        private val DBName = "ACHIEVE_DB"
+        private const val DBName = "ACHIEVE_DB"
         // データベースのバージョン(2,3と挙げていくとonUpgradeメソッドが実行される)
-        private val VERSION = 1
+        private const val VERSION = 1
     }
 
     override fun onCreate(db: SQLiteDatabase) {

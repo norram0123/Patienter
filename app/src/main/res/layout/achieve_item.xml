@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <TextView
+    <com.android.norram.patienter.SofTextView
         android:id="@+id/sof"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
@@ -12,7 +12,6 @@
         android:gravity="center"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:text="X"
         android:textSize="36sp" />
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,7 +24,6 @@
             android:layout_height="wrap_content"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="2020/02/22 ～ 2023/ 12/ 11"
             android:textSize="14sp" />
 
         <TextView
@@ -34,7 +32,6 @@
             android:layout_height="wrap_content"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:text="Graduation"
             android:textSize="24sp" />
     </LinearLayout>
 </LinearLayout>

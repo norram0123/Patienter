@@ -22,10 +22,10 @@ import java.util.*
 
 class CountFragment : Fragment() {
     private var helper: AchieveOpenHelper? = null
-//    private lateinit var defaultValue: String
     private var defaultValue = "2030-11-11T00:00:00"
     private var hours: Int = 0
     private var message = ""
+    private var judgeFlag = true
 
     private lateinit var sharedPref: SharedPreferences
     private lateinit var startTime: LocalDateTime
@@ -45,15 +45,16 @@ class CountFragment : Fragment() {
 
         now = LocalDateTime.now()
         var diffDays = compareLocalDate(startTime.toLocalDate(), goalTime.toLocalDate())
-        var diffSeconds: Long = 0
+        val diffSeconds: Long
         if(startTime.toLocalTime() < goalTime.toLocalTime()) {
             diffSeconds = compareLocalTime(startTime.toLocalTime(), goalTime.toLocalTime())
         } else {
             diffDays--
-            diffSeconds = compareLocalTime(startTime.toLocalTime(), goalTime.toLocalTime().plusHours(24L))
+            diffSeconds = compareLocalTime(startTime.toLocalTime(), goalTime.toLocalTime()) + 24*3600
         }
         val half = 1800
         hours = (diffDays*24 + ((diffSeconds+half) / 3600)).toInt()
+        Log.i("vox", hours.toString())
         message = getString(R.string.cong)
 
         Log.i("vox", "startTime(after): ${startTime}")
@@ -67,7 +68,7 @@ class CountFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = DataBindingUtil.inflate<FragmentCountBinding>(inflater,
             R.layout.fragment_count, container, false)
         val goalTimeText = binding.goalTimeText
@@ -78,8 +79,8 @@ class CountFragment : Fragment() {
         val handler = Handler(Looper.getMainLooper())
         timer = Timer()
 
-        var differentSeconds: Long = 0
-        var differentDays: Long = 0
+        var differentSeconds: Long
+        var differentDays: Long
 
         // timeLinear -> width = height
         val wlLayout = timeLinear.layoutParams
@@ -88,7 +89,7 @@ class CountFragment : Fragment() {
 //        timeLinear.layoutParams = wlLayout
         Log.i("equals", "h:${wlLayout.height}, w:${wlLayout.width}")
 
-        goalTimeText.text = "Goal Time: " + "%1$04d/%2$02d/%3$02d %4$02d:%5$02d:%6$02d".format(goalTime.year, goalTime.monthValue, goalTime.dayOfMonth, goalTime.hour, goalTime.minute, goalTime.second)
+        goalTimeText.text = getString(R.string.goal_formatter).format(goalTime.year, goalTime.monthValue, goalTime.dayOfMonth, goalTime.hour, goalTime.minute, goalTime.second)
 
         timer.schedule(object : TimerTask() {
             override fun run() {
@@ -106,7 +107,7 @@ class CountFragment : Fragment() {
                     val m = differentSeconds % 3600 / 60
                     val s = differentSeconds % 60
                     timeText.text = ("%1$02d:%2$02d:%3$02d".format(h, m, s))
-                    dayText.text = "${differentDays}" + getString(R.string.days)
+                    dayText.text = getString(R.string.days).format(differentDays)
 
                     if(judge()) {
                         timer.cancel()
@@ -145,25 +146,29 @@ class CountFragment : Fragment() {
 
     private fun judge(): Boolean {
         if(now >= goalTime) {
-//            timer.cancel()
+            Log.i("times", "times")
 
-            if(helper == null) { helper = AchieveOpenHelper(requireContext()) }
-            val db = helper?.writableDatabase ?: return false
-            try {
-                val period = "${startTime.year}/${startTime.monthValue}/${startTime.dayOfMonth}" + " ～ " +
-                        "${goalTime.year}/${goalTime.monthValue}/${goalTime.dayOfMonth}"
-                val title = sharedPref.getString(getString(R.string.goal_title), "")
-                db.execSQL("insert into ACHIEVE_TABLE(sof, period,  title) VALUES('${getString(R.string.success)}', '$period', '$title')")
-            } finally {
-                db.close()
-            }
+            if(judgeFlag) {
+                judgeFlag = false
 
-            with(sharedPref.edit()) {
-                putBoolean(getString(com.android.norram.patienter.R.string.set_flag), false)
-                remove(getString(com.android.norram.patienter.R.string.start_time))
-                remove(getString(com.android.norram.patienter.R.string.goal_time))
-                remove(getString(com.android.norram.patienter.R.string.goal_title))
-                apply()
+                if(helper == null) { helper = AchieveOpenHelper(requireContext()) }
+                val db = helper?.writableDatabase ?: return false
+                try {
+                    val period = "${startTime.year}/${startTime.monthValue}/${startTime.dayOfMonth}" + " ～ " +
+                            "${goalTime.year}/${goalTime.monthValue}/${goalTime.dayOfMonth}"
+                    val title = sharedPref.getString(getString(R.string.goal_title), "")
+                    db.execSQL("insert into ACHIEVE_TABLE(sof, period,  title) VALUES('${getString(R.string.success)}', '$period', '$title')")
+                } finally {
+                    db.close()
+                }
+
+                with(sharedPref.edit()) {
+                    putBoolean(getString(R.string.set_flag), false)
+                    remove(getString(R.string.start_time))
+                    remove(getString(R.string.goal_time))
+                    remove(getString(R.string.goal_title))
+                    apply()
+                }
             }
             dialogFragment?.dismiss()
             return true
@@ -183,9 +188,8 @@ class CountFragment : Fragment() {
     }
 
     private fun compareLocalTime(timeSmall: LocalTime, timeBig: LocalTime): Long {
-        var diffSeconds: Long = 0
-        var s1 = timeSmall.hour * 3600 + timeSmall.minute * 60 + timeSmall.second
-        var s2 = timeBig.hour * 3600 + timeBig.minute * 60 + timeBig.second
+        val s1 = timeSmall.hour * 3600 + timeSmall.minute * 60 + timeSmall.second
+        val s2 = timeBig.hour * 3600 + timeBig.minute * 60 + timeBig.second
         return (s2 -s1).toLong()
     }
 }

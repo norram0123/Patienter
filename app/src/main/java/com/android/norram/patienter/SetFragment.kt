@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.*
+import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -231,6 +232,10 @@ class SetFragment : Fragment() {
 
         binding.achieveButton.setOnClickListener { view: View ->
             view.findNavController().navigate(R.id.action_setFragment_to_achieveFragment)
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            activity?.finish()
         }
 
         setHasOptionsMenu(true)

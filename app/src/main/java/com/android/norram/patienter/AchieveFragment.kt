@@ -13,17 +13,16 @@ import com.android.norram.patienter.databinding.FragmentAchieveBinding
 
 class AchieveFragment : Fragment() {
     private var helper: AchieveOpenHelper? = null
-    private lateinit var toolbar: androidx.appcompat.widget.Toolbar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        Log.i("testtest", "1")
-        Log.i("testtest", "2")
+    ): View {
+        Log.i("test", "1")
+        Log.i("test", "2")
         val binding = DataBindingUtil.inflate<FragmentAchieveBinding>(inflater,
             R.layout.fragment_achieve, container, false)
-        Log.i("testtest", "3")
+        Log.i("test", "3")
 
 //        toolbar = binding.toolbar
 
@@ -32,10 +31,10 @@ class AchieveFragment : Fragment() {
         }
         val achieveList = ArrayList<HashMap<String, String>>()
         val db = helper!!.writableDatabase
+        val c = db.rawQuery("select sof, period, title from ACHIEVE_TABLE order by id DESC", null)
 
         try {
             // rawQueryというSELECT専用メソッドを使用してデータを取得する
-            val c = db.rawQuery("select sof, period, title from ACHIEVE_TABLE order by id DESC", null)
             // Cursorの先頭行があるかどうか確認
             var next = c.moveToFirst()
 
@@ -44,7 +43,7 @@ class AchieveFragment : Fragment() {
                 val data = HashMap<String, String>()
                 // 取得したカラムの順番(0から始まる)と型を指定してデータを取得する
                 val sof = c.getString(0)
-                var period = c.getString(1)
+                val period = c.getString(1)
                 var title = c.getString(2)
                 if (title.length > 20) {
                     // リストに表示するのは20文字まで
@@ -63,6 +62,7 @@ class AchieveFragment : Fragment() {
             }
         } finally {
             db.close()
+            c.close()
         }
 
         val simpleAdapter = SimpleAdapter(requireContext(),

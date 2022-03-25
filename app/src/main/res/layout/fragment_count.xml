@@ -52,7 +52,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:text="@string/retire_button"
-            android:textColor="#3F51B5"
             app:layout_constraintBottom_toTopOf="@+id/goalTimeText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

@@ -1,51 +1,58 @@
 <resources>
-    <string name="app_name">Patienter</string>
+    <string name="app_name" translatable="false">Patienter</string>
 
     <!-- Set -->
     <string name="title_hint">Title(optional)</string>
+    <string name="year" translatable="false">Year</string>
+    <string name="month" translatable="false">Month</string>
+    <string name="day" translatable="false">Day</string>
+    <string name="hour" translatable="false">Hour</string>
+    <string name="minute" translatable="false">minute</string>
+    <string name="second" translatable="false">Second</string>
     <string name="enter_year">Enter year</string>
     <string name="enter_month">Enter month</string>
     <string name="enter_day">Enter day</string>
     <string name="enter_hour">Enter hour</string>
     <string name="enter_minute">Enter minute</string>
     <string name="enter_second">Enter second</string>
-    <string name="detail_switch">Detail</string>
-    <string name="start_button">Start</string>
-    <string name="achieve">ACHIEVEMENT</string>
+    <string name="detail_switch" translatable="false">Detail</string>
+    <string name="start_button" translatable="false">Start</string>
+    <string name="achieve" translatable="false">ACHIEVEMENT</string>
     <string name="alert1">You need to chose all options.</string>
     <string name="alert2">You need to enter future time.</string>
-    <string name="help_menu">Help</string>
+    <string name="help_menu" translatable="false">Help</string>
     <string name="help_text">①You can set title for Achievement.
     \n②You need to enter target date.
     \n③You can enter broken-down time to switch the toggle. </string>
 
     <!-- Count -->
-    <string name="default_goal_time">2030-11-11T00:00:00</string>
-    <string name="days">days</string>
-    <string name="and"><![CDATA[&]]></string>
-    <string name="retire_button">Retire</string>
+    <string name="default_goal_time" translatable="false">2030&#8211;11&#8211;11T00:00:00</string>
+    <string name="days" translatable="false">%1$d days</string>
+    <string name="and" translatable="false"><![CDATA[&]]></string>
+    <string name="retire_button" translatable="false">Retire</string>
+    <string name="goal_formatter" translatable="false">"Goal Time: %1$04d/%2$02d/%3$02d %4$02d:%5$02d:%6$02d"</string>
 
     <!-- Achieve -->
-    <string name="back">Back</string>
-    <string name="success">Success</string>
-    <string name="failure">Failure</string>
+    <string name="back" translatable="false">Back</string>
+    <string name="success" translatable="false">Success</string>
+    <string name="failure" translatable="false">Failure</string>
 
     <!-- Reset -->
     <string name="cong">Congratulations!</string>
-    <string name="giveup">Give up...</string>
-    <string name="reset_button">Reset</string>
-    <string name="total">Total:About</string>
-    <string name="hours">hours</string>
+    <string name="give_up">Give up&#8230;</string>
+    <string name="reset_button" translatable="false">Reset</string>
+    <string name="total">Total: About %1$d hours</string>
 
     <!-- Keys -->
-    <string name="set_flag">SFLAG</string>
-    <string name="start_time">STIME</string>
-    <string name="goal_time">GTIME</string>
-    <string name="goal_title">GTITLE</string>
+    <string name="set_flag" translatable="false">SFLAG</string>
+    <string name="start_time" translatable="false">STIME</string>
+    <string name="goal_time" translatable="false">GTIME</string>
+    <string name="goal_title" translatable="false">GTITLE</string>
 
     <!-- Dialogs -->
-    <string name="ok">OK</string>
-    <string name="cancel">CANCEL</string>
+    <string name="ok" translatable="false">OK</string>
+    <string name="cancel" translatable="false">Cancel</string>
+    <string name="explanation" translatable="false">Explanation</string>
     <string name="start_dialog">Are you ready?</string>
     <string name="retire_dialog">The result is recorded in Achievement. Are you sure?</string>
 

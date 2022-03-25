@@ -26,7 +26,7 @@
             android:id="@+id/action_countFragment_to_resetFragment"
             app:destination="@id/resetFragment"
             app:popUpTo="@id/setFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_countFragment_to_achieveFragment"
             app:destination="@id/achieveFragment" />
