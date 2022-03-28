@@ -44,7 +44,7 @@ class RetireDialogFragment constructor(_timer: Timer) : DialogFragment() {
                             diffSeconds = compareLocalTime(startTime.toLocalTime(), now.toLocalTime())
                         } else {
                             diffDays--
-                            diffSeconds = compareLocalTime(startTime.toLocalTime(), now.toLocalTime().plusHours(24L))
+                            diffSeconds = compareLocalTime(startTime.toLocalTime(), now.toLocalTime()) + 24*3600
                         }
                         val half = 1800
                         val hours = (diffDays*24 + ((diffSeconds+half) / 3600)).toInt()

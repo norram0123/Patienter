@@ -41,9 +41,6 @@
                 android:textSize="24sp" />
         </androidx.appcompat.widget.Toolbar>
 
-
-
-
         <ListView
             android:id="@+id/achieveList"
             android:layout_width="match_parent"

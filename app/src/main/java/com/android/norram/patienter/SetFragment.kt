@@ -1,9 +1,11 @@
 package com.android.norram.patienter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import android.widget.*
 import androidx.activity.addCallback
@@ -37,6 +39,7 @@ class SetFragment : Fragment() {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -138,6 +141,22 @@ class SetFragment : Fragment() {
         hourSpinner.adapter = hourAdapter
         minuteSpinner.adapter = minuteAdapter
         secondSpinner.adapter = secondAdapter
+
+        // for hiding keyboard
+        binding.setConstraint.setOnTouchListener { v, event ->
+            when(event.actionMasked) {
+                MotionEvent.ACTION_DOWN->{
+                    v.requestFocus()
+                }
+            }
+            true
+        }
+        titleEdit.setOnFocusChangeListener { view, b ->
+            if(!b) {
+                val inputManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            }
+        }
 
         monthSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
