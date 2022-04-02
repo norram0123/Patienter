@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/setFragment"
-        android:name="com.android.norram.patienter.SetFragment"
+        android:name="com.norram.patienter.SetFragment"
         android:label="fragment_set"
         tools:layout="@layout/fragment_set" >
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/countFragment"
-        android:name="com.android.norram.patienter.CountFragment"
+        android:name="com.norram.patienter.CountFragment"
         android:label="fragment_count"
         tools:layout="@layout/fragment_count" >
         <action
@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/resetFragment"
-        android:name="com.android.norram.patienter.ResetFragment"
+        android:name="com.norram.patienter.ResetFragment"
         android:label="fragment_reset"
         tools:layout="@layout/fragment_reset" >
         <action
@@ -52,7 +52,7 @@
     </fragment>
     <fragment
         android:id="@+id/achieveFragment"
-        android:name="com.android.norram.patienter.AchieveFragment"
+        android:name="com.norram.patienter.AchieveFragment"
         android:label="fragment_achieve"
         tools:layout="@layout/fragment_achieve" />
 </navigation>

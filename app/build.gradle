@@ -14,7 +14,7 @@ android {
         // Required when setting minSdkVersion to 20 or lower
         multiDexEnabled true
 
-        applicationId "com.android.norram.patienter"
+        applicationId "com.norram.patienter"
         minSdk 21
         targetSdk 32
         versionCode 1

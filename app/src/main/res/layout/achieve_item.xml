@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <com.android.norram.patienter.SofTextView
+    <com.norram.patienter.SofTextView
         android:id="@+id/sof"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
