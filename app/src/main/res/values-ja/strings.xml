@@ -7,7 +7,7 @@
     <string name="enter_hour">時間を入力</string>
     <string name="enter_minute">分を入力</string>
     <string name="enter_second">秒を入力</string>
-    <string name="alert1">全ての欄を入力してください。</string>
+    <string name="alert1">全ての項目を選択してください。</string>
     <string name="alert2">未来の時間を入力してください。</string>
     <string name="help_text">①タイトルを設定することが出来ます。
     \n②ゴール時間を設定する必要があります。
