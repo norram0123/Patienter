@@ -3,6 +3,7 @@
 
     <!-- Set -->
     <string name="title_hint">Title(optional)</string>
+    <string name="choose_button" translatable="false">Choose Goal Time</string>
     <string name="year" translatable="false">Year</string>
     <string name="month" translatable="false">Month</string>
     <string name="day" translatable="false">Day</string>
