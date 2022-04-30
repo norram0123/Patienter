@@ -25,6 +25,8 @@
     <string name="help_text">①You can set title for Achievement.
     \n②You need to enter target date.
     \n③You can enter broken-down time to switch the toggle. </string>
+    <string name="choose_date_format" translatable="false">%1$04d-%2$02d-%3$02d</string>
+    <string name="choose_time_format" translatable="false">%1$02d:%2$02d:00</string>
 
     <!-- Count -->
     <string name="default_goal_time" translatable="false">2030&#8211;11&#8211;11T00:00:00</string>
@@ -45,6 +47,10 @@
     <string name="total">Total: About %1$d hours</string>
 
     <!-- Keys -->
+    <string name="choose_date" translatable="false">SELECTED_DATE</string>
+    <string name="choose_time" translatable="false">SELECTED_TIME</string>
+    <string name="request_key" translatable="false">REQUEST_KEY</string>
+    <string name="request_key2" translatable="false">REQUEST_KEY2</string>
     <string name="set_flag" translatable="false">SFLAG</string>
     <string name="start_time" translatable="false">STIME</string>
     <string name="goal_time" translatable="false">GTIME</string>

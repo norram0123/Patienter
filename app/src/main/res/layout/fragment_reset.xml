@@ -16,13 +16,13 @@
             android:layout_marginBottom="48dp"
             android:fontFamily="@font/quicksand_bold"
             android:gravity="center"
-            android:textColor="#03A9F4"
+            android:textColor="@color/orange"
             android:textSize="36sp"
-            tools:text="@string/cong"
             app:layout_constraintBottom_toTopOf="@+id/totalTimeText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.495"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="@string/cong" />
 
         <TextView
             android:id="@+id/totalTimeText"
@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
-            android:backgroundTint="#03A9F4"
+            android:backgroundTint="@color/my_color"
             android:paddingTop="@dimen/button_margin"
             android:paddingBottom="@dimen/button_margin"
             android:text="@string/reset_button"

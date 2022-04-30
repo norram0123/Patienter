@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
@@ -13,7 +14,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.norram.patienter.databinding.FragmentSetBinding
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -47,6 +51,8 @@ class SetFragment : Fragment() {
             R.layout.fragment_set, container, false)
 
         var flagMonthSpinner = true
+        var flagChooseDate = true // to prevent changeDayList function from being run twice
+        val prevCalendar = Calendar.getInstance()
 
         titleEdit = binding.titleEdit
         yearSpinner = binding.yearSpinner
@@ -102,7 +108,7 @@ class SetFragment : Fragment() {
             android.R.layout.simple_spinner_item,
             monthList
         )
-        var dayAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
+        val dayAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
             requireContext(),
             android.R.layout.simple_spinner_item,
             dayList
@@ -155,41 +161,15 @@ class SetFragment : Fragment() {
 
         monthSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
+                if(!flagChooseDate) {
+                    flagChooseDate = true
+                    return
+                }
                 if(flagMonthSpinner || pos == 0) {
                     flagMonthSpinner = false
                     return
                 }
-                if(pos-1 == 1) {
-                    var days = 28
-                    if(Integer.valueOf(yearSpinner.selectedItem.toString()) % 4 == 0) {
-                        if(Integer.valueOf(yearSpinner.selectedItem.toString()) % 100 == 0) {
-                            if(Integer.valueOf(yearSpinner.selectedItem.toString()) % 400 == 0) {
-                                days = 29
-                            }
-                        } else {
-                            days = 29
-                        }
-                    }
-                    dayList.clear()
-                    dayList.add("")
-                    for(i in 1..days) {
-                        dayList.add(i.toString())
-                    }
-                } else {
-                    calendar.set(Calendar.MONTH, pos-1)
-                    dayList.clear()
-                    dayList.add("")
-                    for(i in 1..(calendar.getActualMaximum(Calendar.DAY_OF_MONTH))) {
-                        dayList.add(i.toString())
-                    }
-                }
-                dayAdapter = ArrayAdapter<String>(
-                    requireContext(),
-                    android.R.layout.simple_spinner_item,
-                    dayList
-                )
-                dayAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
-                daySpinner.adapter = dayAdapter
+                daySpinner.adapter = changeDayAdapter(pos, dayList)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -197,7 +177,56 @@ class SetFragment : Fragment() {
             }
         }
 
-        binding.detailSwitch.setOnCheckedChangeListener {_, isChecked ->
+        val detailSwitch = binding.detailSwitch
+
+        binding.chooseButton.setOnClickListener {
+            val supportFragmentManager = requireActivity().supportFragmentManager
+
+            val timePickerDialogFragment = TimePickerDialogFragment()
+            supportFragmentManager.setFragmentResultListener(
+                getString(R.string.request_key2),
+                viewLifecycleOwner
+            ) { resultKey2, bundle2 ->
+                if (resultKey2 == getString(R.string.request_key2)) {
+                    val chooseTime = bundle2.getString(getString(R.string.choose_time))
+                    val time = LocalTime.parse(chooseTime)
+                    val hour = time.hour
+                    val minute = time.minute
+
+                    hourSpinner.setSelection(hour)
+                    minuteSpinner.setSelection(minute)
+                    Log.i("logforme", "aaaa")
+                }
+            }
+
+            val datePickerDialogFragment = DatePickerDialogFragment(prevCalendar, detailSwitch.isChecked, timePickerDialogFragment)
+
+            supportFragmentManager.setFragmentResultListener(
+                getString(R.string.request_key),
+                viewLifecycleOwner
+            ) { resultKey, bundle ->
+                if(resultKey == getString(R.string.request_key)) {
+                    val chooseDate = bundle.getString(getString(R.string.choose_date))
+                    val date = LocalDate.parse(chooseDate, DateTimeFormatter.ISO_DATE)
+                    val year = date.year
+                    val month = date.monthValue
+                    val day = date.dayOfMonth
+                    prevCalendar.set(year, month-1, day)
+
+                    flagChooseDate = false
+
+                    daySpinner.adapter = changeDayAdapter(month, dayList)
+
+                    yearSpinner.setSelection(year - now.year)
+                    monthSpinner.setSelection(month)
+                    daySpinner.setSelection(day)
+                }
+            }
+
+            datePickerDialogFragment.show(supportFragmentManager, "choose_dialog")
+        }
+
+        detailSwitch.setOnCheckedChangeListener {_, isChecked ->
             if(isChecked) {
                 hourSpinner.visibility = View.VISIBLE
                 minuteSpinner.visibility = View.VISIBLE
@@ -269,6 +298,41 @@ class SetFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun changeDayAdapter(pos: Int, dayList: ArrayList<String>): ArrayAdapter<String> {
+        if(pos-1 == 1) {
+            var days = 28
+            if(Integer.valueOf(yearSpinner.selectedItem.toString()) % 4 == 0) {
+                if(Integer.valueOf(yearSpinner.selectedItem.toString()) % 100 == 0) {
+                    if(Integer.valueOf(yearSpinner.selectedItem.toString()) % 400 == 0) {
+                        days = 29
+                    }
+                } else {
+                    days = 29
+                }
+            }
+            dayList.clear()
+            dayList.add("")
+            for(i in 1..days) {
+                dayList.add(i.toString())
+            }
+        } else {
+            val calendar = Calendar.getInstance()
+            calendar.set(Calendar.MONTH, pos-1)
+            dayList.clear()
+            dayList.add("")
+            for(i in 1..(calendar.getActualMaximum(Calendar.DAY_OF_MONTH))) {
+                dayList.add(i.toString())
+            }
+        }
+        val dayAdapter = ArrayAdapter<String>(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            dayList
+        )
+        dayAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
+        return dayAdapter
     }
 
     private fun isFutureTime(selectedTime: LocalDateTime): Boolean {

@@ -69,7 +69,7 @@ class CountFragment : Fragment() {
         val goalTimeText = binding.goalTimeText
         val timeText = binding.timeText
         val dayText = binding.dayText
-        val timeLinear = binding.timeLinear
+//        val timeLinear = binding.timeLinear
 
         val handler = Handler(Looper.getMainLooper())
         timer = Timer()
@@ -78,7 +78,7 @@ class CountFragment : Fragment() {
         var differentDays: Long
 
         // timeLinear -> width = height
-        val wlLayout = timeLinear.layoutParams
+//        val wlLayout = timeLinear.layoutParams
 //        wlLayout.height = timeLinear.width
 //        timeLinear.setLayoutParams(wlLayout)
 //        timeLinear.layoutParams = wlLayout
@@ -88,8 +88,13 @@ class CountFragment : Fragment() {
         timer.schedule(object : TimerTask() {
             override fun run() {
                 handler.post {
+                    if(judge()) {
+                        timer.cancel()
+                        val action = CountFragmentDirections.actionCountFragmentToResetFragment(hours, message)
+                        findNavController().navigate(action)
+                    }
+
                     now = LocalDateTime.now()
-//                    if(now.hour >= goalTime.hour) {
                     if(now.toLocalTime() >= goalTime.toLocalTime()) {
                         differentSeconds = 3600*24 + compareLocalTime(now.toLocalTime(), goalTime.toLocalTime())
                         differentDays = compareLocalDate(now.toLocalDate(), goalTime.toLocalDate()) - 1
@@ -102,12 +107,6 @@ class CountFragment : Fragment() {
                     val s = differentSeconds % 60
                     timeText.text = ("%1$02d:%2$02d:%3$02d".format(h, m, s))
                     dayText.text = getString(R.string.days).format(differentDays)
-
-                    if(judge()) {
-                        timer.cancel()
-                        val action = CountFragmentDirections.actionCountFragmentToResetFragment(hours, message)
-                        findNavController().navigate(action)
-                    }
                 }
             }
         }, 0, 60)

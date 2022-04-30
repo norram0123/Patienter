@@ -18,7 +18,7 @@
     <!-- Achieve -->
 
     <!-- Reset -->
-    <string name="cong">おめでとう\nございます！</string>
+    <string name="cong">目標達成！</string>
     <string name="give_up">ギブアップ&#8230;</string>
     <string name="total">合計: 約%1$d時間</string>
 
