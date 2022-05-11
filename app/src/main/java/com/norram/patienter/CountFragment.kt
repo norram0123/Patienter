@@ -1,5 +1,6 @@
 package com.norram.patienter
 
+import android.app.ActionBar
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -32,6 +34,7 @@ class CountFragment : Fragment() {
     private lateinit var now: LocalDateTime
     private lateinit var timer: Timer
 
+    private var goalTitle: String? = ""
     private var dialogFragment: RetireDialogFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +43,12 @@ class CountFragment : Fragment() {
         sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         startTime = LocalDateTime.parse(sharedPref.getString(getString(R.string.start_time), defaultValue))
         goalTime = LocalDateTime.parse(sharedPref.getString(getString(R.string.goal_time), defaultValue))
+        goalTitle = sharedPref.getString(getString(R.string.goal_title), "")
+
+//        (activity as AppCompatActivity?)!!.supportActionBar?.title = goalTitle
+        (activity as AppCompatActivity).let {
+            if(goalTitle != "") it.supportActionBar?.title = goalTitle
+        }
 
         now = LocalDateTime.now()
         var diffDays = compareLocalDate(startTime.toLocalDate(), goalTime.toLocalDate())

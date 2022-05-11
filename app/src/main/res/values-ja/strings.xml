@@ -1,6 +1,6 @@
 <resources>
     <!-- Set -->
-    <string name="title_hint">タイトル(任意)</string>
+    <string name="title_hint">目標 (任意)</string>
     <string name="enter_year">年を入力</string>
     <string name="enter_month">月を入力</string>
     <string name="enter_day">日を入力</string>

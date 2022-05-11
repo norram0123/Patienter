@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import android.widget.*
 import androidx.activity.addCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -36,6 +37,10 @@ class SetFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+        (activity as AppCompatActivity).let {
+            it.supportActionBar?.title = "Patienter"
+        }
+
         sharedPref?.let {
             val flag = sharedPref.getBoolean(getString(R.string.set_flag), false)
             if(flag) findNavController().navigate(R.id.action_setFragment_to_countFragment)
