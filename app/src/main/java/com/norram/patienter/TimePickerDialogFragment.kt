@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
-import java.text.DateFormat
 import java.util.*
 
 class TimePickerDialogFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {

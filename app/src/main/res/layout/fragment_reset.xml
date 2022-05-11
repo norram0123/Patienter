@@ -16,12 +16,13 @@
             android:layout_marginBottom="48dp"
             android:fontFamily="@font/quicksand_bold"
             android:gravity="center"
-            android:textColor="@color/orange"
+            android:textColor="@color/choose"
             android:textSize="36sp"
             app:layout_constraintBottom_toTopOf="@+id/totalTimeText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="TextContrastCheck"
             tools:text="@string/cong" />
 
         <TextView
@@ -39,13 +40,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
-            android:backgroundTint="@color/my_color"
             android:paddingTop="@dimen/button_margin"
             android:paddingBottom="@dimen/button_margin"
             android:text="@string/reset_button"
             android:textColor="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="TextContrastCheck" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

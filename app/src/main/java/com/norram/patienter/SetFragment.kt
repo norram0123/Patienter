@@ -2,18 +2,19 @@ package com.norram.patienter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import android.widget.*
 import androidx.activity.addCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.norram.patienter.databinding.FragmentSetBinding
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -22,6 +23,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class SetFragment : Fragment() {
+    private lateinit var binding: FragmentSetBinding
     private lateinit var titleEdit: EditText
     private lateinit var yearSpinner: Spinner
     private lateinit var monthSpinner: Spinner
@@ -33,12 +35,18 @@ class SetFragment : Fragment() {
     private lateinit var minuteText: TextView
     private lateinit var secondText: TextView
 
+    private var flagPreventFirst = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+        (activity as AppCompatActivity).let {
+            it.supportActionBar?.title = "Patienter"
+        }
+
         sharedPref?.let {
-            val flag = sharedPref.getBoolean(getString(R.string.set_flag), false)
-            if(flag) findNavController().navigate(R.id.action_setFragment_to_countFragment)
+            if(sharedPref.getBoolean(getString(R.string.set_flag), false))
+                findNavController().navigate(R.id.action_setFragment_to_countFragment)
         }
     }
 
@@ -47,11 +55,11 @@ class SetFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = DataBindingUtil.inflate<FragmentSetBinding>(inflater,
-            R.layout.fragment_set, container, false)
 
-        var flagMonthSpinner = true
-        var flagChooseDate = true // to prevent changeDayList function from being run twice
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_set, container, false)
+        flagPreventFirst = true
+
+        var flagPreventTwice = false // to prevent changeDayList function from being run twice
         val prevCalendar = Calendar.getInstance()
 
         titleEdit = binding.titleEdit
@@ -64,84 +72,6 @@ class SetFragment : Fragment() {
         hourText = binding.hourText
         minuteText = binding.minuteText
         secondText = binding.secondText
-
-        val yearList = ArrayList<String>()
-        val monthList = ArrayList<String>()
-        val dayList = ArrayList<String>()
-        val hourList = ArrayList<String>()
-        val minuteList = ArrayList<String>()
-        val secondList = ArrayList<String>()
-
-        monthList.add("")
-        dayList.add("")
-
-        val now = LocalDateTime.now()
-        for(i in 0..10) {
-            yearList.add((now.year + i).toString())
-        }
-        for(i in 1..12) {
-            monthList.add(i.toString())
-        }
-        val calendar = Calendar.getInstance()
-        calendar.set(now.year, now.monthValue - 1, 1)
-        val dayMax = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
-        for(i in 1..dayMax) {
-            dayList.add(i.toString())
-        }
-        for(i in 0..23) {
-            hourList.add(i.toString())
-        }
-        for(i in 0..59) {
-            minuteList.add(i.toString())
-        }
-        for(i in 0..59) {
-            secondList.add(i.toString())
-        }
-
-        val yearAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            yearList
-        )
-        val monthAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            monthList
-        )
-        val dayAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            dayList
-        )
-        val hourAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            hourList
-        )
-        val minuteAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            minuteList
-        )
-        val secondAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            secondList
-        )
-
-        yearAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
-        monthAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
-        dayAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
-        hourAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
-        minuteAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
-        secondAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
-
-        yearSpinner.adapter = yearAdapter
-        monthSpinner.adapter = monthAdapter
-        daySpinner.adapter = dayAdapter
-        hourSpinner.adapter = hourAdapter
-        minuteSpinner.adapter = minuteAdapter
-        secondSpinner.adapter = secondAdapter
 
         // for hiding keyboard
         binding.setConstraint.setOnTouchListener { v, event ->
@@ -159,29 +89,33 @@ class SetFragment : Fragment() {
             }
         }
 
+        setSpinnerOptions(yearSpinner)
+        setSpinnerOptions(monthSpinner)
+        setSpinnerOptions(daySpinner)
+        setSpinnerOptions(hourSpinner)
+        setSpinnerOptions(minuteSpinner)
+        setSpinnerOptions(secondSpinner)
+
         monthSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-                if(!flagChooseDate) {
-                    flagChooseDate = true
+                if(flagPreventTwice) {
+                    flagPreventTwice = false
                     return
                 }
-                if(flagMonthSpinner || pos == 0) {
-                    flagMonthSpinner = false
+                if(flagPreventFirst || pos == 0) {
+                    flagPreventFirst = false
                     return
                 }
-                daySpinner.adapter = changeDayAdapter(pos, dayList)
+                setSpinnerOptions(daySpinner)
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // Another interface callback
-            }
+            override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
         val detailSwitch = binding.detailSwitch
 
         binding.chooseButton.setOnClickListener {
             val supportFragmentManager = requireActivity().supportFragmentManager
-
             val timePickerDialogFragment = TimePickerDialogFragment()
             supportFragmentManager.setFragmentResultListener(
                 getString(R.string.request_key2),
@@ -195,12 +129,10 @@ class SetFragment : Fragment() {
 
                     hourSpinner.setSelection(hour)
                     minuteSpinner.setSelection(minute)
-                    Log.i("logforme", "aaaa")
                 }
             }
 
             val datePickerDialogFragment = DatePickerDialogFragment(prevCalendar, detailSwitch.isChecked, timePickerDialogFragment)
-
             supportFragmentManager.setFragmentResultListener(
                 getString(R.string.request_key),
                 viewLifecycleOwner
@@ -212,14 +144,12 @@ class SetFragment : Fragment() {
                     val month = date.monthValue
                     val day = date.dayOfMonth
                     prevCalendar.set(year, month-1, day)
-
-                    flagChooseDate = false
-
-                    daySpinner.adapter = changeDayAdapter(month, dayList)
-
-                    yearSpinner.setSelection(year - now.year)
+                    yearSpinner.setSelection(year - LocalDate.now().year)
                     monthSpinner.setSelection(month)
+                    setSpinnerOptions(daySpinner)
                     daySpinner.setSelection(day)
+
+                    flagPreventTwice = true
                 }
             }
 
@@ -260,14 +190,21 @@ class SetFragment : Fragment() {
                 val second = Integer.valueOf(secondSpinner.selectedItem.toString())
                 val title = titleEdit.text.toString()
 
-                val selectedTime = LocalDateTime.of(year, month, day, hour, minute, second)
+                try {
+                    // check whether the date exists
+                    val format = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+                    format.isLenient = false
+                    format.parse(getString(R.string.choose_date_format).format(year, month, day))
 
-//                val selectedTime = "%1$02d-%2$02d-%3$02dT%4$02d:%5$02d:%6$02d".format(year, month, day, hour, minute, second)
-                if(isFutureTime(selectedTime)) {
-                    val dialogFragment = StartDialogFragment(title, selectedTime)
-                    activity?.let {
-                        dialogFragment.show(it.supportFragmentManager,  "help_dialog")
+                    val selectedTime = LocalDateTime.of(year, month, day, hour, minute, second)
+                    if(selectedTime.isAfter(LocalDateTime.now())) {
+                        val dialogFragment = StartDialogFragment(title, selectedTime)
+                        activity?.let { dialogFragment.show(it.supportFragmentManager,  "help_dialog") }
+                    } else {
+                        Toast.makeText(context, R.string.alert2, Toast.LENGTH_LONG).show()
                     }
+                } catch(e: ParseException) {
+                    Toast.makeText(context, "存在しない日付です", Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -300,46 +237,31 @@ class SetFragment : Fragment() {
         }
     }
 
-    private fun changeDayAdapter(pos: Int, dayList: ArrayList<String>): ArrayAdapter<String> {
-        if(pos-1 == 1) {
-            var days = 28
-            if(Integer.valueOf(yearSpinner.selectedItem.toString()) % 4 == 0) {
-                if(Integer.valueOf(yearSpinner.selectedItem.toString()) % 100 == 0) {
-                    if(Integer.valueOf(yearSpinner.selectedItem.toString()) % 400 == 0) {
-                        days = 29
-                    }
-                } else {
-                    days = 29
-                }
-            }
-            dayList.clear()
-            dayList.add("")
-            for(i in 1..days) {
-                dayList.add(i.toString())
-            }
-        } else {
-            val calendar = Calendar.getInstance()
-            calendar.set(Calendar.MONTH, pos-1)
-            dayList.clear()
-            dayList.add("")
-            for(i in 1..(calendar.getActualMaximum(Calendar.DAY_OF_MONTH))) {
-                dayList.add(i.toString())
-            }
-        }
-        val dayAdapter = ArrayAdapter<String>(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            dayList
-        )
-        dayAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
-        return dayAdapter
-    }
+    private fun setSpinnerOptions(spinner: Spinner) {
+        val mList = ArrayList<String>()
+        if(spinner == binding.monthSpinner || spinner == daySpinner) mList.add("")
 
-    private fun isFutureTime(selectedTime: LocalDateTime): Boolean {
-        if(selectedTime <= LocalDateTime.now()) {
-            Toast.makeText(context, R.string.alert2, Toast.LENGTH_LONG).show()
-            return false
+        val date = if(flagPreventFirst) {
+            LocalDate.now()
+        } else {
+            LocalDate.of(Integer.valueOf(yearSpinner.selectedItem.toString()), Integer.valueOf(monthSpinner.selectedItem.toString()), 1)
         }
-        return true
+        val (a, b) = when(spinner) {
+            binding.monthSpinner -> Pair(1, 12)
+            binding.daySpinner -> Pair(1, date.lengthOfMonth())
+            binding.hourSpinner -> Pair(0, 23)
+            binding.minuteSpinner, binding.secondSpinner -> Pair(0, 59)
+            else -> Pair(date.year + 0, date.year + 10)
+        }
+        for(i in a..b) {
+            mList += i.toString()
+        }
+        val mAdapter = ArrayAdapter(
+            requireActivity(),
+            android.R.layout.simple_spinner_item,
+            mList
+        )
+        mAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
+        spinner.adapter = mAdapter
     }
 }

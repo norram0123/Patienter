@@ -10,48 +10,40 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.norram.patienter.databinding.FragmentCountBinding
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.LocalTime
 import java.util.*
 
 class CountFragment : Fragment() {
+    private val defaultValue = "2030-11-11T00:00:00"
     private var helper: AchieveOpenHelper? = null
-    private var defaultValue = "2030-11-11T00:00:00"
     private var hours: Int = 0
     private var message = ""
     private var judgeFlag = true
+    private var goalTitle: String? = ""
+    private var dialogFragment: RetireDialogFragment? = null
 
+    private lateinit var binding: FragmentCountBinding
     private lateinit var sharedPref: SharedPreferences
     private lateinit var startTime: LocalDateTime
     private lateinit var goalTime: LocalDateTime
-    private lateinit var now: LocalDateTime
-    private lateinit var timer: Timer
-
-    private var dialogFragment: RetireDialogFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         startTime = LocalDateTime.parse(sharedPref.getString(getString(R.string.start_time), defaultValue))
         goalTime = LocalDateTime.parse(sharedPref.getString(getString(R.string.goal_time), defaultValue))
+        goalTitle = sharedPref.getString(getString(R.string.goal_title), "")
 
-        now = LocalDateTime.now()
-        var diffDays = compareLocalDate(startTime.toLocalDate(), goalTime.toLocalDate())
-        val diffSeconds: Long
-        if(startTime.toLocalTime() < goalTime.toLocalTime()) {
-            diffSeconds = compareLocalTime(startTime.toLocalTime(), goalTime.toLocalTime())
-        } else {
-            diffDays--
-            diffSeconds = compareLocalTime(startTime.toLocalTime(), goalTime.toLocalTime()) + 24*3600
-        }
-        val half = 1800
-        hours = (diffDays*24 + ((diffSeconds+half) / 3600)).toInt()
+        // set goal title to actionbar
+        (activity as AppCompatActivity).let { if(goalTitle != "") it.supportActionBar?.title = goalTitle }
+
+        val dateManager = DateManager()
+        hours = dateManager.getDiffHours(startTime, goalTime)
         message = getString(R.string.cong)
 
         if(judge()) {
@@ -64,26 +56,13 @@ class CountFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = DataBindingUtil.inflate<FragmentCountBinding>(inflater,
-            R.layout.fragment_count, container, false)
-        val goalTimeText = binding.goalTimeText
-        val timeText = binding.timeText
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_count, container, false)
         val dayText = binding.dayText
-//        val timeLinear = binding.timeLinear
-
+        val timeText = binding.timeText
+        val goalPeriodText = binding.goalPeriodText
         val handler = Handler(Looper.getMainLooper())
-        timer = Timer()
-
-        var differentSeconds: Long
-        var differentDays: Long
-
-        // timeLinear -> width = height
-//        val wlLayout = timeLinear.layoutParams
-//        wlLayout.height = timeLinear.width
-//        timeLinear.setLayoutParams(wlLayout)
-//        timeLinear.layoutParams = wlLayout
-
-        goalTimeText.text = getString(R.string.goal_formatter).format(goalTime.year, goalTime.monthValue, goalTime.dayOfMonth, goalTime.hour, goalTime.minute, goalTime.second)
+        val timer = Timer()
+        val dateManager = DateManager()
 
         timer.schedule(object : TimerTask() {
             override fun run() {
@@ -94,37 +73,33 @@ class CountFragment : Fragment() {
                         findNavController().navigate(action)
                     }
 
-                    now = LocalDateTime.now()
-                    if(now.toLocalTime() >= goalTime.toLocalTime()) {
-                        differentSeconds = 3600*24 + compareLocalTime(now.toLocalTime(), goalTime.toLocalTime())
-                        differentDays = compareLocalDate(now.toLocalDate(), goalTime.toLocalDate()) - 1
-                    } else {
-                        differentSeconds = compareLocalTime(now.toLocalTime(), goalTime.toLocalTime())
-                        differentDays = compareLocalDate(now.toLocalDate(), goalTime.toLocalDate())
-                    }
-                    val h = differentSeconds / 3600
-                    val m = differentSeconds % 3600 / 60
-                    val s = differentSeconds % 60
+                    val ds = dateManager.getDiffDs(goalTime, LocalDateTime.now())
+                    val h = ds.second / 3600
+                    val m = ds.second % 3600 / 60
+                    val s = ds.second % 60
                     timeText.text = ("%1$02d:%2$02d:%3$02d".format(h, m, s))
-                    dayText.text = getString(R.string.days).format(differentDays)
+                    dayText.text = getString(R.string.days).format(ds.first)
                 }
             }
         }, 0, 60)
 
-        binding.retireButton.setOnClickListener { view: View ->
+        goalPeriodText.text = getString(R.string.goal_formatter)
+            .format(goalTime.year, goalTime.monthValue, goalTime.dayOfMonth, goalTime.hour, goalTime.minute, goalTime.second)
+
+        binding.retireButton.setOnClickListener {
             dialogFragment = RetireDialogFragment(timer)
-            activity?.let {
-                dialogFragment?.show(it.supportFragmentManager,  "retire_dialog")
-            }
+            activity?.let { dialogFragment?.show(it.supportFragmentManager,  "retire_dialog") }
         }
 
         binding.achieveButton.setOnClickListener { view: View ->
             timer.cancel()
-            view.findNavController()
-                .navigate(R.id.action_countFragment_to_achieveFragment)
+            view.findNavController().navigate(R.id.action_countFragment_to_achieveFragment)
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(this) {}
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            timer.cancel()
+            activity?.finish()
+        }
 
         return binding.root
     }
@@ -138,20 +113,16 @@ class CountFragment : Fragment() {
     }
 
     private fun judge(): Boolean {
-        if(now >= goalTime) {
-
+        if(goalTime.isBefore(LocalDateTime.now())) {
             if(judgeFlag) {
                 judgeFlag = false
 
                 if(helper == null) { helper = AchieveOpenHelper(requireContext()) }
-                val db = helper?.writableDatabase ?: return false
-                try {
+                helper!!.writableDatabase.use{ db ->
                     val period = "${startTime.year}/${startTime.monthValue}/${startTime.dayOfMonth}" + " ～ " +
                             "${goalTime.year}/${goalTime.monthValue}/${goalTime.dayOfMonth}"
                     val title = sharedPref.getString(getString(R.string.goal_title), "")
                     db.execSQL("insert into ACHIEVE_TABLE(sof, period,  title) VALUES('${getString(R.string.success)}', '$period', '$title')")
-                } finally {
-                    db.close()
                 }
 
                 with(sharedPref.edit()) {
@@ -166,22 +137,5 @@ class CountFragment : Fragment() {
             return true
         }
         return false
-    }
-
-    private fun compareLocalDate(dateSmall: LocalDate, dateBig: LocalDate): Long {
-        var diffDays: Long = 0
-        var d1 = dateSmall
-        val d2 = dateBig
-        while(d1 != d2) {
-            d1 = d1.plusDays(1L)
-            diffDays++
-        }
-        return diffDays
-    }
-
-    private fun compareLocalTime(timeSmall: LocalTime, timeBig: LocalTime): Long {
-        val s1 = timeSmall.hour * 3600 + timeSmall.minute * 60 + timeSmall.second
-        val s2 = timeBig.hour * 3600 + timeBig.minute * 60 + timeBig.second
-        return (s2 -s1).toLong()
     }
 }

@@ -6,7 +6,7 @@
         <item name="colorPrimaryVariant">@color/my_color_dark</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/orange</item>
+        <item name="colorSecondary">@color/choose</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
@@ -14,7 +14,8 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Button.Orange" parent="ThemeOverlay.AppCompat">
-        <item name="colorAccent">@color/orange</item>
+    <style name="ShapeAppearanceOverlay.Patienter.MaterialCardView.Rounded" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
     </style>
 </resources>

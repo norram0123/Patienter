@@ -2,26 +2,16 @@ package com.norram.patienter
 
 import android.app.DatePickerDialog
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.widget.DatePicker
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.*
 
 class DatePickerDialogFragment constructor(_prevCalendar: Calendar, _isChecked: Boolean, _timePickerDialogFragment: TimePickerDialogFragment) : DialogFragment(), DatePickerDialog.OnDateSetListener {
-    private val prevCalendar: Calendar
-    private val isChecked: Boolean
-    private val timePickerDialogFragment: TimePickerDialogFragment
-    init {
-        prevCalendar = _prevCalendar
-        isChecked = _isChecked
-        timePickerDialogFragment = _timePickerDialogFragment
-    }
+    private val prevCalendar: Calendar = _prevCalendar
+    private val isChecked: Boolean = _isChecked
+    private val timePickerDialogFragment: TimePickerDialogFragment = _timePickerDialogFragment
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         // Use the current date as the default date in the picker
@@ -40,9 +30,7 @@ class DatePickerDialogFragment constructor(_prevCalendar: Calendar, _isChecked: 
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, day: Int) {
-
         val chooseDate = getString(R.string.choose_date_format).format(year, month+1, day)
-
         val chooseDateBundle = Bundle()
         chooseDateBundle.putString(getString(R.string.choose_date), chooseDate)
 

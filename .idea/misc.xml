@@ -11,15 +11,17 @@
         <entry key="..\:/Users/rkvol/AndroidStudioProjects/Patienter/app/src/main/res/drawable/baseline_arrow_back_36.xml" value="0.21875" />
         <entry key="..\:/Users/rkvol/AndroidStudioProjects/Patienter/app/src/main/res/drawable/button_choose.xml" value="0.3728205128205128" />
         <entry key="..\:/Users/rkvol/AndroidStudioProjects/Patienter/app/src/main/res/drawable/button_start.xml" value="0.358974358974359" />
+        <entry key="..\:/Users/rkvol/AndroidStudioProjects/Patienter/app/src/main/res/drawable/explanation_fit.xml" value="0.3728205128205128" />
         <entry key="..\:/Users/rkvol/AndroidStudioProjects/Patienter/app/src/main/res/drawable/frame_round.xml" value="0.37864583333333335" />
+        <entry key="..\:/Users/rkvol/AndroidStudioProjects/Patienter/app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.19947916666666668" />
         <entry key="..\:/Users/rkvol/AndroidStudioProjects/Patienter/app/src/main/res/drawable/ic_baseline_verified_24.xml" value="0.37864583333333335" />
         <entry key="..\:/Users/rkvol/AndroidStudioProjects/Patienter/app/src/main/res/font/quicksand_bold.xml" value="0.3927083333333333" />
         <entry key="..\:/Users/rkvol/AndroidStudioProjects/Patienter/app/src/main/res/layout/achieve_item.xml" value="0.3625" />
         <entry key="..\:/Users/rkvol/AndroidStudioProjects/Patienter/app/src/main/res/layout/activity_main.xml" value="0.3484375" />
-        <entry key="..\:/Users/rkvol/AndroidStudioProjects/Patienter/app/src/main/res/layout/dialog_help.xml" value="0.3625" />
+        <entry key="..\:/Users/rkvol/AndroidStudioProjects/Patienter/app/src/main/res/layout/dialog_help.xml" value="0.5299785867237687" />
         <entry key="..\:/Users/rkvol/AndroidStudioProjects/Patienter/app/src/main/res/layout/dialog_start.xml" value="0.3625" />
         <entry key="..\:/Users/rkvol/AndroidStudioProjects/Patienter/app/src/main/res/layout/fragment_achieve.xml" value="0.3625" />
-        <entry key="..\:/Users/rkvol/AndroidStudioProjects/Patienter/app/src/main/res/layout/fragment_count.xml" value="0.3625" />
+        <entry key="..\:/Users/rkvol/AndroidStudioProjects/Patienter/app/src/main/res/layout/fragment_count.xml" value="0.27011494252873564" />
         <entry key="..\:/Users/rkvol/AndroidStudioProjects/Patienter/app/src/main/res/layout/fragment_reset.xml" value="0.3625" />
         <entry key="..\:/Users/rkvol/AndroidStudioProjects/Patienter/app/src/main/res/layout/fragment_set.xml" value="0.33" />
         <entry key="..\:/Users/rkvol/AndroidStudioProjects/Patienter/app/src/main/res/menu/options_menu.xml" value="0.3625" />

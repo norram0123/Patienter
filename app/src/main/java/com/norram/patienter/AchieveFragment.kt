@@ -20,11 +20,7 @@ class AchieveFragment : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentAchieveBinding>(inflater,
             R.layout.fragment_achieve, container, false)
 
-//        toolbar = binding.toolbar
-
-        if(helper == null) {
-            helper = AchieveOpenHelper(requireContext())
-        }
+        if(helper == null) { helper = AchieveOpenHelper(requireContext()) }
         val achieveList = ArrayList<HashMap<String, String>>()
         val db = helper!!.writableDatabase
         val c = db.rawQuery("select sof, period, title from ACHIEVE_TABLE order by id DESC", null)
@@ -79,7 +75,6 @@ class AchieveFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
         (activity as AppCompatActivity).supportActionBar?.show()
     }
 }

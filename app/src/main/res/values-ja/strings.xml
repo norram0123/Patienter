@@ -1,6 +1,6 @@
 <resources>
     <!-- Set -->
-    <string name="title_hint">タイトル(任意)</string>
+    <string name="title_hint">目標 (任意)</string>
     <string name="enter_year">年を入力</string>
     <string name="enter_month">月を入力</string>
     <string name="enter_day">日を入力</string>
@@ -9,9 +9,11 @@
     <string name="enter_second">秒を入力</string>
     <string name="alert1">全ての項目を選択してください。</string>
     <string name="alert2">未来の時間を入力してください。</string>
-    <string name="help_text">①タイトルを設定することが出来ます。
-    \n②ゴール時間を設定する必要があります。
-    \n③オンにすることで詳細なゴール時間を設定出来ます。</string>
+    <string name="help_text">①タイトルを設定できます
+    \n②ゴール時間を選択する必要があります
+    \n③時間を手動で選択できます
+    \n④詳細設定を切り替えます
+    \n⑤今までの実績を確認できます</string>
 
     <!-- Count -->
 

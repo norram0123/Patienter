@@ -2,7 +2,7 @@
     <string name="app_name" translatable="false">Patienter</string>
 
     <!-- Set -->
-    <string name="title_hint">Title(optional)</string>
+    <string name="title_hint">Goal (optional)</string>
     <string name="choose_button" translatable="false">Choose Goal Time</string>
     <string name="year" translatable="false">Year</string>
     <string name="month" translatable="false">Month</string>
@@ -22,9 +22,11 @@
     <string name="alert1">You need to chose all options.</string>
     <string name="alert2">You need to enter future time.</string>
     <string name="help_menu" translatable="false">Help</string>
-    <string name="help_text">①You can set title for Achievement.
-    \n②You need to enter target date.
-    \n③You can enter broken-down time to switch the toggle. </string>
+    <string name="help_text">①You can set goal title
+    \n②You need to enter target date
+    \n③You can enter target date manually
+    \n④You can switch detail mode
+    \n⑤You can check Achievements</string>
     <string name="choose_date_format" translatable="false">%1$04d-%2$02d-%3$02d</string>
     <string name="choose_time_format" translatable="false">%1$02d:%2$02d:00</string>
 
