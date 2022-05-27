@@ -14,6 +14,10 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="AppTheme.Splash" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_drawable</item>
+    </style>
+
     <style name="ShapeAppearanceOverlay.Patienter.MaterialCardView.Rounded" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">12dp</item>

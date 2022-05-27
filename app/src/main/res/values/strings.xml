@@ -63,6 +63,6 @@
     <string name="cancel" translatable="false">Cancel</string>
     <string name="explanation" translatable="false">Explanation</string>
     <string name="start_dialog">Are you ready?</string>
-    <string name="retire_dialog">The result is recorded in Achievement. Are you sure?</string>
+    <string name="retire_dialog">The result is recorded in Achievement. Are you sure to want to give up?</string>
 
 </resources>

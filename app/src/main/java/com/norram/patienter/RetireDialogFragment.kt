@@ -26,7 +26,7 @@ class RetireDialogFragment constructor(_timer: Timer) : DialogFragment() {
                     val startTime = LocalDateTime.parse(sharedPref?.getString(getString(R.string.start_time), defaultValue))
                     val goalTime = LocalDateTime.parse(sharedPref?.getString(getString(R.string.goal_time), defaultValue))
                     val dateManager = DateManager()
-                    val hours = dateManager.getDiffHours(startTime, goalTime)
+                    val hours = dateManager.getDiffHours(startTime, LocalDateTime.now())
                     val message = getString(R.string.give_up)
                     val period = "${startTime.year}/${startTime.monthValue}/${startTime.dayOfMonth}" + " ～ " +
                                 "${goalTime.year}/${goalTime.monthValue}/${goalTime.dayOfMonth}"
