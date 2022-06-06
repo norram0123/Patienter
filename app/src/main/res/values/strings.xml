@@ -32,10 +32,10 @@
 
     <!-- Count -->
     <string name="default_goal_time" translatable="false">2030&#8211;11&#8211;11T00:00:00</string>
-    <string name="days" translatable="false">%1$d days</string>
-    <string name="and" translatable="false"><![CDATA[&]]></string>
+    <string name="time_format1" translatable="false">%1$d days\n&amp;\n%2$02d:%3$02d:%4$02d</string>
+    <string name="time_format2" translatable="false">%1$d:%2$02d:%3$02d</string>
     <string name="retire_button" translatable="false">Retire</string>
-    <string name="goal_formatter" translatable="false">"Goal Time: %1$04d/%2$02d/%3$02d %4$02d:%5$02d:%6$02d"</string>
+    <string name="goal_format" translatable="false">"Goal Time: %1$04d/%2$02d/%3$02d %4$02d:%5$02d:%6$02d"</string>
 
     <!-- Achieve -->
     <string name="back" translatable="false">Back</string>

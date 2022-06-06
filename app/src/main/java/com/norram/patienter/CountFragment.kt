@@ -57,12 +57,12 @@ class CountFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_count, container, false)
-        val dayText = binding.dayText
         val timeText = binding.timeText
         val goalPeriodText = binding.goalPeriodText
         val handler = Handler(Looper.getMainLooper())
         val timer = Timer()
         val dateManager = DateManager()
+        var mode = 0
 
         timer.schedule(object : TimerTask() {
             override fun run() {
@@ -77,14 +77,23 @@ class CountFragment : Fragment() {
                     val h = ds.second / 3600
                     val m = ds.second % 3600 / 60
                     val s = ds.second % 60
-                    timeText.text = ("%1$02d:%2$02d:%3$02d".format(h, m, s))
-                    dayText.text = getString(R.string.days).format(ds.first)
+                    timeText.text = setTime(mode, ds.first, h, m, s)
                 }
             }
         }, 0, 60)
 
-        goalPeriodText.text = getString(R.string.goal_formatter)
+        goalPeriodText.text = getString(R.string.goal_format)
             .format(goalTime.year, goalTime.monthValue, goalTime.dayOfMonth, goalTime.hour, goalTime.minute, goalTime.second)
+
+        binding.timeLinear.setOnClickListener {
+            val ds = dateManager.getDiffDs(goalTime, LocalDateTime.now())
+            val h = ds.second / 3600
+            val m = ds.second % 3600 / 60
+            val s = ds.second % 60
+
+            mode++
+            setTime(mode, ds.first, h, m, s)
+        }
 
         binding.retireButton.setOnClickListener {
             dialogFragment = RetireDialogFragment(timer)
@@ -137,5 +146,13 @@ class CountFragment : Fragment() {
             return true
         }
         return false
+    }
+
+    private fun setTime(mode: Int, first: Long, h: Long, m: Long, s: Long): String {
+        when(mode.mod(2)) {
+            0 ->  return getString(R.string.time_format1).format(first, h, m, s)
+            1 -> return getString(R.string.time_format2).format(first * 24 + h, m, s)
+        }
+        return getString(R.string.time_format1).format(first, h, m, s)
     }
 }
